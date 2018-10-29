@@ -3,6 +3,11 @@ let messagesDom = $('#messages');
 let messageInput = $('[name=message]');
 let locationButton = $('#send-location');
 
+
+// Mustache templates to render dynamic template and inject values easily.
+let messageTemplate = $("#message-template").html();
+let locationMessageTemplate = $("#location-message-template").html();
+
 socket.on('connect', function() {
     console.info('Connected to server socket');
 });
@@ -20,15 +25,25 @@ socket.on('newLocationMessage', function(message){
 });
 
 function renderNewMessage(message) {
-    var formattedtime = moment().format('h:mm a');
-    var newMessage = $('<li></li>');
-    newMessage.text(`${message.from} ${formattedtime}: ${message.text}`);
-    messagesDom.append(newMessage);
+    var formattedTime = moment().format('h:mm a');
+    //var newMessage = $('<li></li>');
+    //newMessage.text(`${message.from} ${formattedtime}: ${message.text}`);
+    var newMessage = Mustache.render(messageTemplate, {
+        text: message.text,
+        from: message.from,
+        createdAt: formattedTime
+    });
+    messagesDom.append(newMessage);    
 }
 
 function renderNewLocationMessage(message) {
-    var formattedtime = moment().format('h:mm a');
-    var newMessage = $(`<li>${message.from} ${formattedtime}: <a target="_blank" href="${message.url}">My Location</a</li>`);
+    var formattedTime = moment().format('h:mm a');
+    //var newMessage = $(`<li>${message.from} ${formattedtime}: <a target="_blank" href="${message.url}">My Location</a</li>`);
+    var newMessage = Mustache.render(locationMessageTemplate, {
+        url: message.url,
+        from: message.from,
+        createdAt: formattedTime
+    });
     messagesDom.append(newMessage);
 }
 
