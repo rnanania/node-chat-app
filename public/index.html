@@ -1,18 +1,33 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8">
-</head>
-<body>
-    <h1>Welcome to Chat App</h1>
-    <form id="message-form">
-        <input name="message" type="text" placeholder="Type a message"/>
-        <button type="submit">Send</button>
-    </form>
-    <button id="send-location">Send Location</button>
-    <ol id="messages"></ol>
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="/js/libs/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="/js/index.js"></script>
-</body>
+    <title>Chat App</title>
+    <meta name="description" content="A simple chat app using NodeJS & SocketIO">
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body class="chat">
+        <div class="chat__sidebar">
+            <h3>People</h3>
+            <div id="users">
+            </div>
+        </div>
+    
+        <div class="chat__main">
+            <ol id="messages" class="chat__messages"></ol>
+    
+            <div class="chat__footer">
+                <form id="message-form">
+                    <input name="message" type="text" placeholder="Type a message" autofocus autocomplete="off"/>
+                    <button type="submit">Send</button>
+                </form>
+                <button id="send-location">Send Location</button>            
+            </div>         
+        </div>
+    
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="/js/libs/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="/js/libs/moment.min.js"></script>
+        <script type="text/javascript" src="/js/index.js"></script>
+    </body>
 </html>
