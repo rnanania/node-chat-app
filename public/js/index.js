@@ -1,12 +1,12 @@
-let socket = io();
-let messagesDom = $('#messages');
-let messageInput = $('[name=message]');
-let locationButton = $('#send-location');
+var socket = io();
+var messagesDom = $('#messages');
+var messageInput = $('[name=message]');
+var locationButton = $('#send-location');
 
 
 // Mustache templates to render dynamic template and inject values easily.
-let messageTemplate = $("#message-template").html();
-let locationMessageTemplate = $("#location-message-template").html();
+var messageTemplate = $("#message-template").html();
+var locationMessageTemplate = $("#location-message-template").html();
 
 socket.on('connect', function() {
     console.info('Connected to server socket');
@@ -24,6 +24,16 @@ socket.on('newLocationMessage', function(message){
     renderNewLocationMessage(message);
 });
 
+function scrollToBottom() {
+    var clientHeight = messagesDom.prop('clientHeight');
+    var scrollTop = messagesDom.prop('scrollTop');
+    var scrollHeight = messagesDom.prop('scrollHeight');
+
+    if(scrollHeight > (clientHeight + scrollTop)){
+        messagesDom.animate({ scrollTop: scrollHeight - clientHeight }, 500);
+    }
+}
+
 function renderNewMessage(message) {
     var formattedTime = moment().format('h:mm a');
     //var newMessage = $('<li></li>');
@@ -33,7 +43,8 @@ function renderNewMessage(message) {
         from: message.from,
         createdAt: formattedTime
     });
-    messagesDom.append(newMessage);    
+    messagesDom.append(newMessage);
+    scrollToBottom(); 
 }
 
 function renderNewLocationMessage(message) {
@@ -45,6 +56,7 @@ function renderNewLocationMessage(message) {
         createdAt: formattedTime
     });
     messagesDom.append(newMessage);
+    scrollToBottom();
 }
 
 function disableLocationButton() {
