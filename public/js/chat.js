@@ -8,12 +8,41 @@ var locationButton = $('#send-location');
 var messageTemplate = $("#message-template").html();
 var locationMessageTemplate = $("#location-message-template").html();
 
+function getQueryParams() {
+    var queryParamsObject = {};
+    var queryParams = decodeURIComponent(window.location.search);
+    queryParams = queryParams.replace('?', '');
+    queryParams = queryParams.split('&');
+
+    queryParams.forEach(function(qp){
+        var qpSplit = qp.split('=');
+        queryParamsObject[qpSplit[0]] = qpSplit[1];
+    });
+    return queryParamsObject;
+}
+
 socket.on('connect', function() {
-    console.info('Connected to server socket');
+    var params = getQueryParams();
+    socket.emit('join', params, function(err){
+        if(err){
+            alert(err);
+            window.location.href = '/index.html';
+        } else {
+            console.info('Connected to server socket');
+        }
+    });    
 });
 
 socket.on('disconnect', function() {
     console.info('DisConnected from server socket');
+});
+
+socket.on('updatedUserList', function(users) {
+    var ol = $('<ol></ol>');
+    users.forEach(function(user) {
+        ol.append($(`<li>${user}</li>`));
+    });
+    $('#users').html(ol);
 });
 
 socket.on('newMessage', function(message){
